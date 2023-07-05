@@ -1,0 +1,9 @@
+version: "3"
+services:
+  backend:
+    build: .
+    container_name: backend
+    restart: always
+    environment:
+      - DATABASE=<your_databse_url>
+      - SECRET=<your_discord_token>
