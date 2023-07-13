@@ -47,10 +47,7 @@ export const createUser = async (req, res) => {
       password,
     });
 
-    console.log(1);
     const user = await newUser.save();
-
-    console.log(2);
 
     const token = generateJWT(user);
     return res
@@ -60,7 +57,7 @@ export const createUser = async (req, res) => {
     console.log(error);
     return res
       .status(500)
-      .json({ message: "Ha ocurrido un error en el servidor" });
+      .json({ error, message: "Ha ocurrido un error en el servidor" });
   }
 };
 
@@ -88,7 +85,9 @@ export const loginUser = async (req, res) => {
     res.json({ message: "logeado correactamente", token });
   } catch (error) {
     console.log(error);
-    res.status(500).send(error);
+    res
+      .status(500)
+      .json({ error, message: "Ha ocurrido un error en el servidor" });
   }
 };
 
