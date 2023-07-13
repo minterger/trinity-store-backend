@@ -4,7 +4,7 @@ import {
   deleteRank,
   editRank,
   getRanks,
-} from "../controllers/rank.controllers";
+} from "../controllers/rank.controllers.js";
 
 const route = Router();
 
