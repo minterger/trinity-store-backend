@@ -11,15 +11,16 @@ import rankRoutes from "./routes/rank.routes.js";
 
 const app = express();
 
+const dev = process.env.MODE === "dev";
+
 app.use(
   cors({
-    origin:
-      process.env.MODE === "dev"
-        ? "*"
-        : ["https://www.trinitymc.online", "https://trinitymc.online"],
+    origin: dev
+      ? "*"
+      : ["https://www.trinitymc.online", "https://trinitymc.online"],
   })
 );
-app.use(morgan("dev"));
+app.use(morgan(dev ? "dev" : "tiny"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
