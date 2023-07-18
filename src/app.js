@@ -13,7 +13,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://www.trinitymc.online", "https://trinitymc.online"],
+    origin:
+      process.env.MODE === "dev"
+        ? "*"
+        : ["https://www.trinitymc.online", "https://trinitymc.online"],
   })
 );
 app.use(morgan("dev"));
