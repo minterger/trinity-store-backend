@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-const Database = process.env.DATABASE;
+import { Database } from "./config.js";
+
 (async () => {
   try {
     await mongoose.connect(Database);
