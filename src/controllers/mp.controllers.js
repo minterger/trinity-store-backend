@@ -1,38 +1,41 @@
 import mp from "mercadopago";
-import { BaseUrl, FrontUrl, TokenMP } from "../config.js";
+import { FrontUrl, TokenMP } from "../config.js";
 import generateSecureRandomId from "../helpers/generateID.js";
-
-const { configure, preferences } = mp;
-
-configure({
-  access_token: TokenMP,
-});
 
 export const createPreference = async (req, res) => {
   const { email } = req.user;
 
+  mp.configure({
+    access_token: TokenMP,
+  });
   try {
     const items = req.body;
 
     const external_reference = generateSecureRandomId(20);
 
-    const createdPreference = await preferences.create({
+    const notification_url = `${req.protocol}://${req.hostname}/mp/webhook`;
+
+    const createdPreference = await mp.preferences.create({
       items,
       back_urls: {
         success: FrontUrl + "success",
         pending: FrontUrl + "pending",
         failure: FrontUrl + "failure",
       },
-      notification_url: BaseUrl + "mp/webhook",
+      notification_url,
       external_reference,
       auto_return: "approved",
       payer: { email },
     });
 
-    console.log(createdPreference);
-
-    res.json(createdPreference);
-  } catch (error) {}
+    res.status(201).json({
+      status: "created",
+      init_point: createdPreference.body.init_point,
+      external_reference,
+    });
+  } catch (error) {
+    res.status(500).send("error al crear la preferencia");
+  }
 };
 
 export const webhook = (req, res) => {
