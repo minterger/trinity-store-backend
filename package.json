@@ -19,7 +19,7 @@
     "jsonwebtoken": "^9.0.1",
     "md5": "^2.3.0",
     "mercadopago": "^1.5.17",
-    "mongoose": "^7.4.1",
+    "mongoose": "^7.4.2",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
