@@ -1,6 +1,7 @@
 import mp from "mercadopago";
 import { FrontUrl, TokenMP } from "../config.js";
 import generateSecureRandomId from "../helpers/generateID.js";
+import Payment from "../models/Payment.js";
 
 export const createPreference = async (req, res) => {
   const { email } = req.user;
@@ -13,7 +14,13 @@ export const createPreference = async (req, res) => {
 
     const external_reference = generateSecureRandomId(20);
 
-    const notification_url = `${req.protocol}://${req.hostname}/mp/webhook`;
+    const newPayment = new Payment({
+      items,
+      external_reference,
+      user: req.user.id,
+    });
+
+    const notification_url = `https://${req.hostname}/mp/webhook`;
 
     const createdPreference = await mp.preferences.create({
       items,
@@ -28,9 +35,13 @@ export const createPreference = async (req, res) => {
       payer: { email },
     });
 
+    newPayment.init_point = createdPreference.body?.init_point;
+
+    await newPayment.save();
+
     res.status(201).json({
       status: "created",
-      init_point: createdPreference.body.init_point,
+      init_point: createdPreference.body?.init_point,
       external_reference,
     });
   } catch (error) {
@@ -38,6 +49,27 @@ export const createPreference = async (req, res) => {
   }
 };
 
-export const webhook = (req, res) => {
-  res.status(200).send("ok");
+export const webhook = async (req, res) => {
+  const { data, type } = req.body;
+
+  if (type === "payment") {
+    try {
+      const payment = await mp.payment.findById(data.id);
+
+      const external_reference = payment.body.external_reference;
+
+      const searchedPayment = await Payment.findOne({ external_reference });
+
+      searchedPayment.status = payment.body.status;
+
+      await searchedPayment.save();
+
+      res.sendStatus(204);
+    } catch (e) {
+      res.status(500).send("Internal server error");
+      console.log(e);
+    }
+  } else {
+    res.sendStatus(204);
+  }
 };
