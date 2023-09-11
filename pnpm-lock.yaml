@@ -35,6 +35,9 @@ dependencies:
   morgan:
     specifier: ^1.10.0
     version: 1.10.0
+  rcon-client:
+    specifier: ^4.2.3
+    version: 4.2.3
 
 devDependencies:
   nodemon:
@@ -1239,6 +1242,12 @@ packages:
       unpipe: 1.0.0
     dev: false
 
+  /rcon-client@4.2.3:
+    resolution: {integrity: sha512-g+DEzI3O0Nl4Y3mPp6DHhSpYeiv+wTq8iKxCumFGO0/SMCsdNfx9bpT5RyHa7phR5dvspKfQK0ZYJp1YCtXNng==}
+    dependencies:
+      typed-emitter: 0.1.0
+    dev: false
+
   /readable-stream@3.6.2:
     resolution: {integrity: sha512-9u/sniCrY3D5WdsERHzHE4G2YCXqoG5FTHUiCC4SIbr6XcLZBY05ya9EKjYek9O5xOAwjGq+1JdGBAS7Q9ScoA==}
     engines: {node: '>= 6'}
@@ -1543,6 +1552,10 @@ packages:
     dependencies:
       media-typer: 0.3.0
       mime-types: 2.1.35
+    dev: false
+
+  /typed-emitter@0.1.0:
+    resolution: {integrity: sha512-Tfay0l6gJMP5rkil8CzGbLthukn+9BN/VXWcABVFPjOoelJ+koW8BuPZYk+h/L+lEeIp1fSzVRiWRPIjKVjPdg==}
     dev: false
 
   /undefsafe@2.0.5:

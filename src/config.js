@@ -5,3 +5,6 @@ export const Dev = process.env.MODE === "dev";
 export const TokenMP = process.env.TOKEN_MP;
 export const BaseUrl = process.env.BASE_URL;
 export const FrontUrl = process.env.FRONT_URL;
+export const RconHost = process.env.RCON_HOST;
+export const RconPort = process.env.RCON_PORT;
+export const RconPassword = process.env.RCON_PASSWORD;

@@ -2,6 +2,11 @@ import mp from "mercadopago";
 import { FrontUrl, TokenMP } from "../config.js";
 import generateSecureRandomId from "../helpers/generateID.js";
 import Payment from "../models/Payment.js";
+import {
+  sendCommandRcon,
+  filterListCommand,
+  filterUserInList,
+} from "../helpers/rcon.js";
 
 export const createPreference = async (req, res) => {
   const { email } = req.user;
@@ -63,6 +68,24 @@ export const webhook = async (req, res) => {
       searchedPayment.status = payment.body.status;
 
       await searchedPayment.save();
+
+      searchedPayment.items.forEach(async (item) => {
+        if (item.type === "rank") {
+          await sendCommandRcon(item.command);
+        }
+        if (item.type === "item") {
+          const list = await sendCommandRcon("list");
+          const filterList = filterListCommand(list);
+          const isUserOnline = filterUserInList({
+            userArray: filterList,
+            username: payment.user?.username,
+          });
+
+          if (isUserOnline) {
+            await sendCommandRcon(item.command);
+          }
+        }
+      });
 
       res.sendStatus(204);
     } catch (e) {
