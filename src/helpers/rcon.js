@@ -1,18 +1,18 @@
 import { Rcon } from "rcon-client";
 import { RconHost, RconPort, RconPassword } from "../config.js";
 
-const rcon = await Rcon.connect({
-  host: RconHost,
-  port: RconPort,
-  password: RconPassword,
-});
-
 const filterText = (text) => {
   return text.replace(/§\w/g, "");
 };
 
 export const sendCommandRcon = async (command) => {
   try {
+    const rcon = await Rcon.connect({
+      host: RconHost,
+      port: RconPort,
+      password: RconPassword,
+    });
+
     const res = await rcon.send(command);
 
     await rcon.end();
