@@ -17,7 +17,7 @@ app.use(
   cors({
     origin: Dev
       ? "*"
-      : ["https://www.trinitymc.online", "https://trinitymc.online"],
+      : ["https://www.trinitymc.online", "https://trinitymc.online", "https://trinity-store-backend.vercel.app"],
   })
 );
 app.use(morgan(Dev ? "dev" : "tiny"));
